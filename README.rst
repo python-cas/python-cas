@@ -112,3 +112,4 @@ References
 .. _Rayco Abad-Martín: https://github.com/Rayco
 .. _Édouard Lopez: https://github.com/edouard-lopez
 .. _Guillaume Vincent: https://github.com/guillaumevincent
+.. _Evgeny Fadeev: https://github.com/evgenyfadeev
