@@ -1,0 +1,18 @@
+# Python garbage
+*.pyc
+*.egg-info
+*.sublime-workspace
+build/
+dist/
+_build/
+
+# Mac OS X garbage
+.DS_Store
+
+# PyDev garbage
+.tmp*
+
+.idea/
+
+# Tox
+.tox
