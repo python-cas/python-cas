@@ -24,15 +24,13 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
     ],
     description='CAS 1.0/2.0 client authentication backend for Django (inherited from django-cas)',
-    keywords=['django', 'cas', 'cas2', 'cas3', 'client', 'sso', 'single sign-on', 'authentication', 'auth'],
+    keywords=['cas', 'cas2', 'cas3', 'client', 'sso', 'single sign-on', 'authentication', 'auth'],
     license='BSD',
     long_description=readme,
-    name='django-cas-ng',
-    packages=['django_cas_ng'],
-    url='https://github.com/mingchen/django-cas-ng',
-    #bugtrack_url='https://github.com/mingchen/django-cas-ng/issues',  # not support this key
-    download_url ='https://github.com/mingchen/django-cas-ng/releases',
-    version='3.4.2',
-    install_requires=['Django >= 1.5'],
+    name='python-cas',
+    packages=['cas'],
+    url='https://github.com/python-cas/python-cas',
+    download_url ='https://github.com/python-cas/python-cas/releases',
+    version='1.0.0',
 )
 
