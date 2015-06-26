@@ -3,6 +3,7 @@ from django.utils.six.moves.urllib_request import urlopen, Request
 from uuid import uuid4
 import datetime
 
+
 class CASError(ValueError):
     pass
 
