@@ -9,6 +9,20 @@ class CASError(ValueError):
     pass
 
 
+class SingleLogoutMixin(object):
+    @classmethod
+    def get_saml_slos(cls, logout_request):
+        """returns saml logout ticket info"""
+        from lxml import etree
+        try:
+            root = etree.fromstring(logout_request)
+            return root.xpath(
+                "//samlp:SessionIndex",
+                namespaces={'samlp': "urn:oasis:names:tc:SAML:2.0:protocol"})
+        except etree.XMLSyntaxError:
+            pass
+
+
 class CASClient(object):
     def __new__(self, *args, **kwargs):
         version = kwargs.pop('version')
@@ -155,7 +169,6 @@ class CASClientV2(CASClientBase):
         finally:
             page.close()
 
-
     @classmethod
     def verify_response(cls, response):
         try:
@@ -193,7 +206,7 @@ class CASClientV2(CASClientBase):
             return None, None, None
 
 
-class CASClientV3(CASClientV2):
+class CASClientV3(CASClientV2, SingleLogoutMixin):
     """CAS Client Version 3"""
 
     logout_redirect_param_name = 'service'
@@ -266,7 +279,7 @@ IssueInstant="{timestamp}">
 </SOAP-ENV:Envelope>"""
 
 
-class CASClientWithSAMLV1(CASClientV2):
+class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
     """CASClient 3.0+ with SAML"""
 
     def verify_ticket(self, ticket, **kwargs):
@@ -360,15 +373,3 @@ class CASClientWithSAMLV1(CASClientV2):
             timestamp=timestamp,
             ticket=ticket,
         ).encode('utf8')
-
-    @classmethod
-    def get_saml_slos(cls, logout_request):
-        """returns saml logout ticket info"""
-        from lxml import etree
-        try:
-            root = etree.fromstring(logout_request)
-            return root.xpath(
-                "//samlp:SessionIndex",
-                namespaces={'samlp': "urn:oasis:names:tc:SAML:2.0:protocol"})
-        except etree.XMLSyntaxError:
-            pass
