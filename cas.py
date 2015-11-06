@@ -220,10 +220,10 @@ IssueInstant="{timestamp}">
 </SOAP-ENV:Envelope>"""
 
 
-class CASClientWithSAMLV1(CASClientBase):
+class CASClientWithSAMLV1(CASClientV2):
     """CASClient 3.0+ with SAML"""
 
-    def verify_ticket(self, ticket):
+    def verify_ticket(self, ticket, **kwargs):
         """Verifies CAS 3.0+ XML-based authentication ticket and returns extended attributes.
 
         @date: 2011-11-30
