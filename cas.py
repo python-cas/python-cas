@@ -24,6 +24,9 @@ class CASClient(object):
 
 
 class CASClientBase(object):
+
+    logout_redirect_param_name = 'service'
+
     def __init__(self, service_url=None, server_url=None,
                  extra_login_params=None, renew=False,
                  username_attribute=None):
@@ -50,11 +53,11 @@ class CASClientBase(object):
         query = urllib_parse.urlencode(params)
         return url + '?' + query
 
-    def get_logout_url(self, redirect_url=None, redirect_param_name='service'):
+    def get_logout_url(self, redirect_url=None):
         """Generates CAS logout URL"""
         url = urllib_parse.urljoin(self.server_url, 'logout')
         if redirect_url:
-            url += '?' + urllib_parse.urlencode({redirect_param_name: redirect_url})
+            url += '?' + urllib_parse.urlencode({self.logout_redirect_param_name: redirect_url})
         return url
 
     def get_proxy_url(self, pgt):
@@ -86,6 +89,8 @@ class CASClientBase(object):
 class CASClientV1(CASClientBase):
     """CAS Client Version 1"""
 
+    logout_redirect_param_name = 'url'
+
     def verify_ticket(self, ticket):
         """Verifies CAS 1.0 authentication ticket.
 
@@ -107,6 +112,8 @@ class CASClientV1(CASClientBase):
 
 class CASClientV2(CASClientBase):
     """CAS Client Version 2"""
+
+    logout_redirect_param_name = 'url'
 
     def __init__(self, proxy_callback=None, *args, **kwargs):
         """proxy_callback is for V2 and V3 so V3 is subclass of V2"""
@@ -149,8 +156,47 @@ class CASClientV2(CASClientBase):
             page.close()
 
 
+    @classmethod
+    def verify_response(cls, response):
+        try:
+            from xml.etree import ElementTree
+        except ImportError:
+            from elementtree import ElementTree
+
+        user = None
+        attributes = {}
+        pgtiou = None
+
+        tree = ElementTree.fromstring(response)
+        if tree[0].tag.endswith('authenticationSuccess'):
+            for element in tree[0]:
+                if element.tag.endswith('user'):
+                    user = element.text
+                elif element.tag.endswith('proxyGrantingTicket'):
+                    pgtiou = element.text
+                elif element.tag.endswith('attributes'):
+                    for attribute in element:
+                        tag = attribute.tag.split("}").pop()
+                        if tag in attributes:
+                            if isinstance(attributes[tag], list):
+                                attributes[tag].append(attribute.text)
+                            else:
+                                attributes[tag] = [attributes[tag]]
+                                attributes[tag].append(attribute.text)
+                        else:
+                            if tag == 'attraStyle':
+                                pass
+                            else:
+                                attributes[tag] = attribute.text
+            return user, attributes, pgtiou
+        else:
+            return None, None, None
+
+
 class CASClientV3(CASClientV2):
     """CAS Client Version 3"""
+
+    logout_redirect_param_name = 'service'
 
     def verify_ticket(self, ticket):
         """Verifies CAS 3.0+ XML-based authentication ticket and returns extended attributes.

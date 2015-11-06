@@ -54,20 +54,53 @@ def test_login_url_helper_with_renew():
 # get_logout_url tests
 #
 @fixture
-def logout_client():
-    return cas.CASClientBase(
+def logout_client_v1():
+    return cas.CASClientV1(
         server_url='http://www.example.com/cas/'
     )
 
-def test_logout_url(logout_client):
-    actual = logout_client.get_logout_url()
+
+@fixture
+def logout_client_v2():
+    return cas.CASClientV2(
+        server_url='http://www.example.com/cas/'
+    )
+
+
+@fixture
+def logout_client_v3():
+    return cas.CASClientV3(
+        server_url='http://www.example.com/cas/'
+    )
+
+
+def test_logout_url(logout_client_v3):
+    actual = logout_client_v3.get_logout_url()
     expected = 'http://www.example.com/cas/logout'
 
     assert actual == expected
 
 
-def test_logout_url_with_redirect(logout_client):
-    actual = logout_client.get_logout_url(
+def test_v1_logout_url_with_redirect(logout_client_v1):
+    actual = logout_client_v1.get_logout_url(
+                redirect_url='http://testserver/landing-page/'
+            )
+    expected = 'http://www.example.com/cas/logout?url=http%3A%2F%2Ftestserver%2Flanding-page%2F'
+
+    assert actual == expected
+
+
+def test_v2_logout_url_with_redirect(logout_client_v2):
+    actual = logout_client_v2.get_logout_url(
+                redirect_url='http://testserver/landing-page/'
+            )
+    expected = 'http://www.example.com/cas/logout?url=http%3A%2F%2Ftestserver%2Flanding-page%2F'
+
+    assert actual == expected
+
+
+def test_v3_logout_url_with_redirect(logout_client_v3):
+    actual = logout_client_v3.get_logout_url(
                 redirect_url='http://testserver/landing-page/'
             )
     expected = 'http://www.example.com/cas/logout?service=http%3A%2F%2Ftestserver%2Flanding-page%2F'
@@ -75,12 +108,9 @@ def test_logout_url_with_redirect(logout_client):
     assert actual == expected
 
 
-def test_logout_url_with_redirect_custom_redirect_param_name(logout_client):
-    actual = logout_client.get_logout_url(
-                redirect_url='http://testserver/landing-page/',
-                redirect_param_name='url'
-            )
-    expected = 'http://www.example.com/cas/logout?url=http%3A%2F%2Ftestserver%2Flanding-page%2F'
+def test_v3_logout_url_without_redirect(logout_client_v3):
+    actual = logout_client_v3.get_logout_url()
+    expected = 'http://www.example.com/cas/logout'
 
     assert actual == expected
 
