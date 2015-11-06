@@ -70,6 +70,16 @@ def test_logout_url_with_redirect(logout_client):
     actual = logout_client.get_logout_url(
                 redirect_url='http://testserver/landing-page/'
             )
+    expected = 'http://www.example.com/cas/logout?service=http%3A%2F%2Ftestserver%2Flanding-page%2F'
+
+    assert actual == expected
+
+
+def test_logout_url_with_redirect_custom_redirect_param_name(logout_client):
+    actual = logout_client.get_logout_url(
+                redirect_url='http://testserver/landing-page/',
+                redirect_param_name='url'
+            )
     expected = 'http://www.example.com/cas/logout?url=http%3A%2F%2Ftestserver%2Flanding-page%2F'
 
     assert actual == expected

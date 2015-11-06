@@ -50,11 +50,11 @@ class CASClientBase(object):
         query = urllib_parse.urlencode(params)
         return url + '?' + query
 
-    def get_logout_url(self, redirect_url=None):
+    def get_logout_url(self, redirect_url=None, redirect_param_name='service'):
         """Generates CAS logout URL"""
         url = urllib_parse.urljoin(self.server_url, 'logout')
         if redirect_url:
-            url += '?' + urllib_parse.urlencode({'url': redirect_url})
+            url += '?' + urllib_parse.urlencode({redirect_param_name: redirect_url})
         return url
 
     def get_proxy_url(self, pgt):
