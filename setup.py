@@ -22,6 +22,9 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
     ],
+    install_requires=[
+        'six',
+    ],
     description='CAS 1.0/2.0 client authentication backend for Django (inherited from django-cas)',
     keywords=['cas', 'cas2', 'cas3', 'client', 'sso', 'single sign-on', 'authentication', 'auth'],
     license='MIT',

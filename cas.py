@@ -1,5 +1,6 @@
-from django.utils.six.moves import urllib_parse
-from django.utils.six.moves.urllib_request import urlopen, Request
+from six.moves.urllib import parse as urllib_parse
+from six.moves.urllib import request as urllib_request
+from six.moves.urllib.request import Request
 from uuid import uuid4
 import datetime
 
@@ -63,7 +64,7 @@ class CASClientBase(object):
 
     def get_proxy_ticket(self, pgt):
         """Returns proxy ticket given the proxy granting ticket"""
-        response = urlopen(self.get_proxy_url(pgt))
+        response = urllib_request.urlopen(self.get_proxy_url(pgt))
         if response.code == 200:
             from lxml import etree
             root = etree.fromstring(response.read())
@@ -93,7 +94,7 @@ class CASClientV1(CASClientBase):
         params = [('ticket', ticket), ('service', self.service)]
         url = (urllib_parse.urljoin(self.server_url, 'validate') + '?' +
                urllib_parse.urlencode(params))
-        page = urlopen(url)
+        page = urllib_request.urlopen(url)
         try:
             verified = page.readline().strip()
             if verified == 'yes':
@@ -131,7 +132,7 @@ class CASClientV2(CASClientBase):
 
         url = (urllib_parse.urljoin(self.server_url, 'serviceValidate') + '?' +
                urllib_parse.urlencode(params))
-        page = urlopen(url)
+        page = urllib_request.urlopen(url)
         try:
             response = page.read()
             tree = ElementTree.fromstring(response)
@@ -165,7 +166,7 @@ class CASClientV3(CASClientV2):
             params.append(('pgtUrl', self.proxy_callback))
         base_url = urllib_parse.urljoin(self.server_url, 'proxyValidate')
         url = base_url + '?' + urllib_parse.urlencode(params)
-        page = urlopen(url)
+        page = urllib_request.urlopen(url)
         return page.read()
 
     @classmethod
@@ -284,7 +285,7 @@ class CASClientWithSAMLV1(CASClientBase):
             '',
             headers,
         )
-        page = urlopen(url, data=self.get_saml_assertion(ticket))
+        page = urllib_request.urlopen(url, data=self.get_saml_assertion(ticket))
 
         return page
 
