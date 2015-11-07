@@ -71,12 +71,13 @@ class CASClientBase(object):
         """Generates CAS logout URL"""
         url = urllib_parse.urljoin(self.server_url, 'logout')
         if redirect_url:
-            url += '?' + urllib_parse.urlencode({self.logout_redirect_param_name: redirect_url})
+            params = {self.logout_redirect_param_name: redirect_url}
+            url += '?' + urllib_parse.urlencode(params)
         return url
 
     def get_proxy_url(self, pgt):
         """Returns proxy url, given the proxy granting ticket"""
-        params = urllib_parse.urlencode({'pgt': pgt, 'targetService': self.get_service_url()})
+        params = urllib_parse.urlencode({'pgt': pgt, 'targetService': self.service_url})
         return "%s/proxy?%s" % (self.server_url, params)
 
     def get_proxy_ticket(self, pgt):
@@ -127,6 +128,7 @@ class CASClientV1(CASClientBase):
 class CASClientV2(CASClientBase):
     """CAS Client Version 2"""
 
+    url_suffix = 'serviceValidate'
     logout_redirect_param_name = 'url'
 
     def __init__(self, proxy_callback=None, *args, **kwargs):
@@ -135,87 +137,7 @@ class CASClientV2(CASClientBase):
         super(CASClientV2, self).__init__(*args, **kwargs)
 
     def verify_ticket(self, ticket):
-        """Verifies CAS 2.0+ XML-based authentication ticket.
-
-        Returns username on success and None on failure.
-        """
-        try:
-            from xml.etree import ElementTree
-        except ImportError:
-            from elementtree import ElementTree
-
-        user = None
-        pgtiou = None
-
-        params = [('ticket', ticket), ('service', self.service_url)]
-        if self.proxy_callback:
-            params.append(('pgtUrl', self.proxy_callback))
-
-        url = (urllib_parse.urljoin(self.server_url, 'serviceValidate') + '?' +
-               urllib_parse.urlencode(params))
-        page = urllib_request.urlopen(url)
-        try:
-            response = page.read()
-            tree = ElementTree.fromstring(response)
-            if tree[0].tag.endswith('authenticationSuccess'):
-                for element in tree[0]:
-                    if element.tag.endswith('user'):
-                        user = element.text
-                    elif element.tag.endswith('proxyGrantingTicket'):
-                        pgtiou = element.text
-                return user, None, pgtiou
-            else:
-                return None, None, None
-        finally:
-            page.close()
-
-    @classmethod
-    def verify_response(cls, response):
-        try:
-            from xml.etree import ElementTree
-        except ImportError:
-            from elementtree import ElementTree
-
-        user = None
-        attributes = {}
-        pgtiou = None
-
-        tree = ElementTree.fromstring(response)
-        if tree[0].tag.endswith('authenticationSuccess'):
-            for element in tree[0]:
-                if element.tag.endswith('user'):
-                    user = element.text
-                elif element.tag.endswith('proxyGrantingTicket'):
-                    pgtiou = element.text
-                elif element.tag.endswith('attributes'):
-                    for attribute in element:
-                        tag = attribute.tag.split("}").pop()
-                        if tag in attributes:
-                            if isinstance(attributes[tag], list):
-                                attributes[tag].append(attribute.text)
-                            else:
-                                attributes[tag] = [attributes[tag]]
-                                attributes[tag].append(attribute.text)
-                        else:
-                            if tag == 'attraStyle':
-                                pass
-                            else:
-                                attributes[tag] = attribute.text
-            return user, attributes, pgtiou
-        else:
-            return None, None, None
-
-
-class CASClientV3(CASClientV2, SingleLogoutMixin):
-    """CAS Client Version 3"""
-
-    logout_redirect_param_name = 'service'
-
-    def verify_ticket(self, ticket):
-        """Verifies CAS 3.0+ XML-based authentication ticket and returns extended attributes.
-
-        Returns username on success and None on failure.
-        """
+        """Verifies CAS 2.0+/3.0+ XML-based authentication ticket and returns extended attributes"""
         response = self.get_verification_response(ticket)
         return self.verify_response(response)
 
@@ -223,24 +145,51 @@ class CASClientV3(CASClientV2, SingleLogoutMixin):
         params = [('ticket', ticket), ('service', self.service_url)]
         if self.proxy_callback:
             params.append(('pgtUrl', self.proxy_callback))
-        base_url = urllib_parse.urljoin(self.server_url, 'proxyValidate')
+        base_url = urllib_parse.urljoin(self.server_url, self.url_suffix)
         url = base_url + '?' + urllib_parse.urlencode(params)
         page = urllib_request.urlopen(url)
-        return page.read()
+        try:
+            return page.read()
+        finally:
+            page.close()
+
+    @classmethod
+    def parse_attributes_xml_element(cls, element):
+        attributes = dict()
+        for attribute in element:
+            tag = attribute.tag.split("}").pop()
+            if tag in attributes:
+                if isinstance(attributes[tag], list):
+                    attributes[tag].append(attribute.text)
+                else:
+                    attributes[tag] = [attributes[tag]]
+                    attributes[tag].append(attribute.text)
+            else:
+                if tag == 'attraStyle':
+                    pass
+                else:
+                    attributes[tag] = attribute.text
+        return attributes
 
     @classmethod
     def verify_response(cls, response):
-        user = None
-        attributes = {}
-        pgtiou = None
+        user, attributes, pgtiou = cls.parse_response_xml(response)
+        if len(attributes) == 0:
+            attributes = None
+        return user, attributes, pgtiou
 
+    @classmethod
+    def parse_response_xml(cls, response):
         try:
             from xml.etree import ElementTree
         except ImportError:
             from elementtree import ElementTree
 
-        tree = ElementTree.fromstring(response)
+        user = None
+        attributes = {}
+        pgtiou = None
 
+        tree = ElementTree.fromstring(response)
         if tree[0].tag.endswith('authenticationSuccess'):
             for element in tree[0]:
                 if element.tag.endswith('user'):
@@ -248,18 +197,33 @@ class CASClientV3(CASClientV2, SingleLogoutMixin):
                 elif element.tag.endswith('proxyGrantingTicket'):
                     pgtiou = element.text
                 elif element.tag.endswith('attributes'):
-                    for attribute in element:
-                        tag = attribute.tag.split("}").pop()
-                        if tag in attributes:
-                            if isinstance(attributes[tag], list):
-                                attributes[tag].append(attribute.text)
-                            else:
-                                attributes[tag] = [attributes[tag]]
-                                attributes[tag].append(attribute.text)
-                        else:
-                            attributes[tag] = attribute.text
-
+                    attributes = cls.parse_attributes_xml_element(element)
         return user, attributes, pgtiou
+
+
+class CASClientV3(CASClientV2, SingleLogoutMixin):
+    """CAS Client Version 3"""
+    url_suffix = 'serviceValidate'
+    logout_redirect_param_name = 'service'
+
+    @classmethod
+    def parse_attributes_xml_element(cls, element):
+        attributes = dict()
+        for attribute in element:
+            tag = attribute.tag.split("}").pop()
+            if tag in attributes:
+                if isinstance(attributes[tag], list):
+                    attributes[tag].append(attribute.text)
+                else:
+                    attributes[tag] = [attributes[tag]]
+                    attributes[tag].append(attribute.text)
+            else:
+                attributes[tag] = attribute.text
+        return attributes
+
+    @classmethod
+    def verify_response(cls, response):
+        return cls.parse_response_xml(response)
 
 
 SAML_1_0_NS = 'urn:oasis:names:tc:SAML:1.0:'
@@ -339,14 +303,12 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
         saml_validate_url = urllib_parse.urljoin(
             self.server_url, 'samlValidate',
         )
-        url = Request(
+        request = Request(
             saml_validate_url + '?' + urllib_parse.urlencode(params),
-            '',
+            self.get_saml_assertion(ticket),
             headers,
         )
-        page = urllib_request.urlopen(url, data=self.get_saml_assertion(ticket))
-
-        return page
+        return urllib_request.urlopen(request)
 
     @classmethod
     def get_saml_assertion(cls, ticket):
