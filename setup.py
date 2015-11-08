@@ -25,7 +25,7 @@ setup(
     install_requires=[
         'six',
     ],
-    description='Python CAS client library'
+    description='Python CAS client library',
     keywords=['cas', 'cas2', 'cas3', 'client', 'sso', 'single sign-on', 'authentication', 'auth'],
     license='MIT',
     long_description=readme,
