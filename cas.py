@@ -142,12 +142,14 @@ class CASClientV2(CASClientBase):
         return self.verify_response(response)
 
     def get_verification_response(self, ticket):
-        params = [('ticket', ticket), ('service', self.service_url)]
+        params = {
+            'ticket': ticket,
+            'service': self.service_url
+        }
         if self.proxy_callback:
-            params.append(('pgtUrl', self.proxy_callback))
+            params.update({'pgtUrl': self.proxy_callback})
         base_url = urllib_parse.urljoin(self.server_url, self.url_suffix)
-        url = base_url + '?' + urllib_parse.urlencode(params)
-        page = requests.get(url)
+        page = requests.get(base_url, params=params)
         try:
             return page.content
         finally:
