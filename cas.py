@@ -305,7 +305,11 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
         saml_validate_url = urllib_parse.urljoin(
             self.server_url, 'samlValidate',
         )
-        return requests.post(saml_validate_url, self.get_saml_assertion(ticket), params=params, headers=headers)
+        return requests.post(
+            saml_validate_url, 
+            self.get_saml_assertion(ticket), 
+            params=params, 
+            headers=headers)
 
     @classmethod
     def get_saml_assertion(cls, ticket):
