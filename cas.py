@@ -1,6 +1,5 @@
+import requests
 from six.moves.urllib import parse as urllib_parse
-from six.moves.urllib import request as urllib_request
-from six.moves.urllib.request import Request
 from uuid import uuid4
 import datetime
 
@@ -82,10 +81,10 @@ class CASClientBase(object):
 
     def get_proxy_ticket(self, pgt):
         """Returns proxy ticket given the proxy granting ticket"""
-        response = urllib_request.urlopen(self.get_proxy_url(pgt))
-        if response.code == 200:
+        response = requests.get(self.get_proxy_url(pgt))
+        if response.status_code == 200:
             from lxml import etree
-            root = etree.fromstring(response.read())
+            root = etree.fromstring(response.content)
             tickets = root.xpath(
                 "//cas:proxyTicket",
                 namespaces={"cas": "http://www.yale.edu/tp/cas"}
@@ -98,7 +97,7 @@ class CASClientBase(object):
             )
             if len(errors) == 1:
                 raise CASError(errors[0].attrib['code'], errors[0].text)
-        raise CASError("Bad http code %s" % response.code)
+        raise CASError("Bad http code %s" % response.status_code)
 
 
 class CASClientV1(CASClientBase):
@@ -114,11 +113,12 @@ class CASClientV1(CASClientBase):
         params = [('ticket', ticket), ('service', self.service_url)]
         url = (urllib_parse.urljoin(self.server_url, 'validate') + '?' +
                urllib_parse.urlencode(params))
-        page = urllib_request.urlopen(url)
+        page = requests.get(url, stream=True)
         try:
-            verified = page.readline().strip()
+            page_iterator = page.iter_lines(chunk_size=8192)
+            verified = next(page_iterator).strip()
             if verified == 'yes':
-                return page.readline().strip(), None, None
+                return next(page_iterator).strip(), None, None
             else:
                 return None, None, None
         finally:
@@ -142,14 +142,16 @@ class CASClientV2(CASClientBase):
         return self.verify_response(response)
 
     def get_verification_response(self, ticket):
-        params = [('ticket', ticket), ('service', self.service_url)]
+        params = {
+            'ticket': ticket,
+            'service': self.service_url
+        }
         if self.proxy_callback:
-            params.append(('pgtUrl', self.proxy_callback))
+            params.update({'pgtUrl': self.proxy_callback})
         base_url = urllib_parse.urljoin(self.server_url, self.url_suffix)
-        url = base_url + '?' + urllib_parse.urlencode(params)
-        page = urllib_request.urlopen(url)
+        page = requests.get(base_url, params=params)
         try:
-            return page.read()
+            return page.content
         finally:
             page.close()
 
@@ -265,7 +267,7 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
         try:
             user = None
             attributes = {}
-            response = page.read()
+            response = page.content
             tree = ElementTree.fromstring(response)
             # Find the authentication status
             success = tree.find('.//' + SAML_1_0_PROTOCOL_NS + 'StatusCode')
@@ -302,16 +304,15 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
             'connection': 'keep-alive',
             'content-type': 'text/xml; charset=utf-8',
         }
-        params = [('TARGET', self.service_url)]
+        params = {'TARGET': self.service_url}
         saml_validate_url = urllib_parse.urljoin(
             self.server_url, 'samlValidate',
         )
-        request = Request(
-            saml_validate_url + '?' + urllib_parse.urlencode(params),
+        return requests.post(
+            saml_validate_url,
             self.get_saml_assertion(ticket),
-            headers,
-        )
-        return urllib_request.urlopen(request)
+            params=params,
+            headers=headers)
 
     @classmethod
     def get_saml_assertion(cls, ticket):
