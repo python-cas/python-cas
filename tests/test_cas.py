@@ -193,3 +193,10 @@ def test_cas2_jasig_attributes(client_v2):
         'nombroj': ['unu', 'du', 'tri', 'kvar'],
     }
     assert attributes == expected_attributes
+
+SUCCESS_RESPONSE_WITH_NON_STANDARD_USER_NODE = """<?xml version="1.0" encoding="UTF-8"?>
+<cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas"><cas:authenticationSuccess><cas:utilisateur><cas:displayName>John Doe</cas:displayName><cas:user>someuser</cas:user><cas:uid>someuser</cas:uid></cas:utilisateur></cas:authenticationSuccess></cas:serviceResponse>
+"""
+def test_cas2_non_standard_user_node(client_v2):
+    user, attributes, pgtiou = client_v2.verify_response(SUCCESS_RESPONSE_WITH_NON_STANDARD_USER_NODE)
+    assert user == 'someuser'

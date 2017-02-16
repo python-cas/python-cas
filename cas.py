@@ -193,10 +193,11 @@ class CASClientV2(CASClientBase):
 
         tree = ElementTree.fromstring(response)
         if tree[0].tag.endswith('authenticationSuccess'):
+            """ Get namespace for looking for elements by tagname """
+            namespace = tree.tag[0:tree.tag.index('}')+1]
+            user = tree[0].find('.//' + namespace + 'user').text
             for element in tree[0]:
-                if element.tag.endswith('user'):
-                    user = element.text
-                elif element.tag.endswith('proxyGrantingTicket'):
+                if element.tag.endswith('proxyGrantingTicket'):
                     pgtiou = element.text
                 elif element.tag.endswith('attributes'):
                     attributes = cls.parse_attributes_xml_element(element)
