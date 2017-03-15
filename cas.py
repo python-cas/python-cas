@@ -206,7 +206,7 @@ class CASClientV2(CASClientBase):
 
 class CASClientV3(CASClientV2, SingleLogoutMixin):
     """CAS Client Version 3"""
-    url_suffix = 'serviceValidate'
+    url_suffix = 'p3/serviceValidate'
     logout_redirect_param_name = 'service'
 
     @classmethod
