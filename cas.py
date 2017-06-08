@@ -2,7 +2,7 @@ import requests
 from six.moves.urllib import parse as urllib_parse
 from uuid import uuid4
 import datetime
-
+from lxml import etree
 
 class CASError(ValueError):
     pass
@@ -12,14 +12,29 @@ class SingleLogoutMixin(object):
     @classmethod
     def get_saml_slos(cls, logout_request):
         """returns saml logout ticket info"""
-        from lxml import etree
         try:
             root = etree.fromstring(logout_request)
             return root.xpath(
                 "//samlp:SessionIndex",
                 namespaces={'samlp': "urn:oasis:names:tc:SAML:2.0:protocol"})
         except etree.XMLSyntaxError:
-            pass
+            return None
+        
+    @classmethod
+    def verify_logout_request(cls, logout_request, ticket):
+        """verifies the single logout request came from the CAS server
+        
+        returns True if the logout_request is valid, False otherwise
+        """
+        try:
+            session_index = cls.get_saml_slos(logout_request)
+            session_index = session_index[0].text
+            if session_index == ticket:
+                return True
+            else:
+                return False
+        except AttributeError, IndexError:
+            return False
 
 
 class CASClient(object):
