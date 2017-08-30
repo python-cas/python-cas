@@ -24,7 +24,8 @@ setup(
     ],
     install_requires=[
         'six',
-        'requests'
+        'requests',
+        'lxml>=3.4',
     ],
     description='Python CAS client library',
     keywords=['cas', 'cas2', 'cas3', 'client', 'sso', 'single sign-on', 'authentication', 'auth'],
