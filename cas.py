@@ -23,7 +23,6 @@ class SingleLogoutMixin(object):
     @classmethod
     def verify_logout_request(cls, logout_request, ticket):
         """verifies the single logout request came from the CAS server
-        
         returns True if the logout_request is valid, False otherwise
         """
         try:
@@ -33,7 +32,7 @@ class SingleLogoutMixin(object):
                 return True
             else:
                 return False
-        except AttributeError, IndexError:
+        except (AttributeError, IndexError):
             return False
 
 
