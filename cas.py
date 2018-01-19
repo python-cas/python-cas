@@ -4,6 +4,7 @@ from uuid import uuid4
 import datetime
 from lxml import etree
 
+
 class CASError(ValueError):
     pass
 
@@ -19,7 +20,7 @@ class SingleLogoutMixin(object):
                 namespaces={'samlp': "urn:oasis:names:tc:SAML:2.0:protocol"})
         except etree.XMLSyntaxError:
             return None
-        
+
     @classmethod
     def verify_logout_request(cls, logout_request, ticket):
         """verifies the single logout request came from the CAS server
