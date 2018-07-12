@@ -1,8 +1,11 @@
+import logging
 import requests
 from six.moves.urllib import parse as urllib_parse
 from uuid import uuid4
 import datetime
 from lxml import etree
+
+logger = logging.getLogger(__name__)
 
 
 class CASError(ValueError):
@@ -190,6 +193,7 @@ class CASClientV2(CASClientBase):
 
     @classmethod
     def verify_response(cls, response):
+        logger.debug('%s response - %s', cls.__name__, response)
         user, attributes, pgtiou = cls.parse_response_xml(response)
         if len(attributes) == 0:
             attributes = None
@@ -241,6 +245,7 @@ class CASClientV3(CASClientV2, SingleLogoutMixin):
 
     @classmethod
     def verify_response(cls, response):
+        logger.debug('%s response - %s', cls.__name__, response)
         return cls.parse_response_xml(response)
 
 
