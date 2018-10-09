@@ -38,3 +38,8 @@ here. For additional detail, read the complete `commit history`_.
 * Add method verify_logout_request
 * Add lxml to setup.py
 
+
+**python-cas 1.4.0** ``[2018-10-09]``
+
+* Add kwarg `verify_ssl_certificate` to bypass SSL certificate validation
+
