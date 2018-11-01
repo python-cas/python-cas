@@ -94,7 +94,8 @@ References
 
 .. _CAS: https://www.apereo.org/cas
 .. _CAS protocol: https://www.apereo.org/cas/protocol
-.. _django-cas-ng: https://bitbucket.org/cpcc/django-cas
+.. _django-cas-ng: https://github.com/mingchen/django-cas-ng
+.. _django-cas: https://bitbucket.org/cpcc/django-cas
 .. _pip: http://www.pip-installer.org/
 .. _PEP8: https://www.python.org/dev/peps/pep-0008/
 .. _Django coding style: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style
