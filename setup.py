@@ -32,7 +32,7 @@ setup(
     license='MIT',
     long_description=readme,
     name='python-cas',
-    packages=['.'],
+    py_modules=['cas'],
     url='https://github.com/python-cas/python-cas',
     download_url ='https://github.com/python-cas/python-cas/releases',
     version='1.4.0',
