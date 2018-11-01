@@ -184,7 +184,7 @@ class CASClientV2(CASClientBase):
 
     @classmethod
     def parse_attributes_xml_element(cls, element):
-        attributes = dict()
+        attributes = {}
         for attribute in element:
             tag = attribute.tag.split("}").pop()
             if tag in attributes:
@@ -239,7 +239,7 @@ class CASClientV3(CASClientV2, SingleLogoutMixin):
 
     @classmethod
     def parse_attributes_xml_element(cls, element):
-        attributes = dict()
+        attributes = {}
         for attribute in element:
             tag = attribute.tag.split("}").pop()
             if tag in attributes:
