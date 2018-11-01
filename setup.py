@@ -45,4 +45,3 @@ setup(
     download_url ='https://github.com/python-cas/python-cas/releases',
     version='1.4.0',
 )
-
