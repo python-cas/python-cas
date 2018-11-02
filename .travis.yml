@@ -4,23 +4,23 @@ cache: pip
 matrix:
   include:
     - python: "2.7"
-      env: TOX_ENV=py27
+      env: TOXENV=py27
     - python: "3.4"
-      env: TOX_ENV=py34
+      env: TOXENV=py34
     - python: "3.5"
-      env: TOX_ENV=py35
+      env: TOXENV=py35
     - python: "3.6"
-      env: TOX_ENV=py36
+      env: TOXENV=py36
     - python: "3.7"
-      env: TOX_ENV=py37
+      env: TOXENV=py37
       dist: xenial
       sudo: required
-    - env: TOX_ENV=flake8
+    - env: TOXENV=flake8
 
 install:
   - "travis_retry pip install setuptools --upgrade"
   - "pip install tox"
 script:
-  - tox -e $TOX_ENV
+  - tox
 after_script:
-  - cat .tox/$TOX_ENV/log/*.log
+  - cat .tox/$TOXENV/log/*.log
