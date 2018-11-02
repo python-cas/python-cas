@@ -1,5 +1,4 @@
 lxml>=3.4
-pytest-pythonpath==0.3
 pytest
 six
 tox==1.8.1
