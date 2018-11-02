@@ -1,9 +1,10 @@
-import logging
-import requests
-from six.moves.urllib import parse as urllib_parse
-from uuid import uuid4
 import datetime
+import logging
+from uuid import uuid4
+
+import requests
 from lxml import etree
+from six.moves.urllib import parse as urllib_parse
 
 logger = logging.getLogger(__name__)
 

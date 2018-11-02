@@ -1,8 +1,11 @@
 """Tests for the cas protocol-related code"""
 from __future__ import absolute_import
+
+import sys
+
 import cas
 from pytest import fixture
-import sys
+
 
 #general tests, apply to all protocols
 #

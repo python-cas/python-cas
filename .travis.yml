@@ -16,6 +16,7 @@ matrix:
       dist: xenial
       sudo: required
     - env: TOXENV=flake8
+    - env: TOXENV=isort
 
 install:
   - "travis_retry pip install setuptools --upgrade"
