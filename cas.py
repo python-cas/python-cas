@@ -101,7 +101,7 @@ class CASClientBase(object):
 
     def get_proxy_ticket(self, pgt):
         """Returns proxy ticket given the proxy granting ticket"""
-        response = requests.get(self.get_proxy_url(pgt))
+        response = requests.get(self.get_proxy_url(pgt), verify=self.verify_ssl_certificate)
         if response.status_code == 200:
             from lxml import etree
             root = etree.fromstring(response.content)
