@@ -228,7 +228,7 @@ class CASClientV2(CASClientBase):
             for element in tree[0]:
                 if element.tag.endswith('proxyGrantingTicket'):
                     pgtiou = element.text
-                elif element.tag.endswith('attributes'):
+                elif element.tag.endswith('attributes') or element.tag.endswith('norEduPerson'):
                     attributes = cls.parse_attributes_xml_element(element)
         return user, attributes, pgtiou
 
