@@ -22,6 +22,6 @@ To allow attributes to be retrieved from `<norEduPerson>` nested elements when t
 
 # Sponsorship
 
-If this project helps you reduce time to develop, you can give me a cup of coffee ☕️ :)
+If this project helps you reduce time to develop, you can give me a cup of coffee ☕️ :-)
 
 [![Donate with PayPal](https://www.paypalobjects.com/en_US/FR/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P3DGL6EANDY96&source=url)
