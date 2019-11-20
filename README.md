@@ -1,4 +1,4 @@
-# Add support for [norEduPerson](https://docs.feide.no/schema/noredu/index.html) tag in XML CAS response
+# Add support for [norEduPerson](https://docs.feide.no/schema/noredu/noredu_ch02.html#relationship-to-other-ldap-schemas) tag in XML CAS response
 
 [![Django](https://img.shields.io/badge/Django-2.2.3-green.svg)](https://www.djangoproject.com/weblog/2019/jul/01/security-releases/)
 [![Python 3.7.3](https://img.shields.io/badge/python-3.7.3-green.svg)](https://www.python.org/)
@@ -19,6 +19,16 @@ To allow attributes to be retrieved from `<norEduPerson>` nested elements when t
     </cas:authenticationSuccess>
 </cas:serviceResponse>
 ```
+
+## What is [norEduPerson](https://docs.feide.no/schema/noredu/noredu_ch02.html#relationship-to-other-ldap-schemas)?
+
+> eduPerson is designed to support LDAP (Lightweight Directory Access Protocol) operations for campus directories designed to facilitate communication among higher education institutions. It consists of a set of data elements or attributes about individuals within higher education, along with recommendations on the syntax and semantics of the data that may be assigned to those attributes.
+
+> The norEdu classes add further attributes supplementing eduPerson/eduOrg in order to satisfy the requirements of the environment of the Nordic educational community, such as support for National Identity Numbers (norEduPersonNIN) and for the educational numbering and identifier schemes.
+
+Further reading:
+- https://docs.feide.no/schema/noredu/noredu_ch02.html#relationship-to-other-ldap-schemas
+- http://software.internet2.edu/eduperson/internet2-mace-dir-eduperson-201602.html#Introduction
 
 # Sponsorship
 
