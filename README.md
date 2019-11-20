@@ -23,7 +23,7 @@ To allow attributes to be retrieved from `<norEduPerson>` nested elements when t
 ## What is [norEduPerson](https://docs.feide.no/schema/noredu/noredu_ch02.html#relationship-to-other-ldap-schemas)?
 
 > eduPerson is designed to support LDAP (Lightweight Directory Access Protocol) operations for campus directories designed to facilitate communication among higher education institutions. It consists of a set of data elements or attributes about individuals within higher education, along with recommendations on the syntax and semantics of the data that may be assigned to those attributes.
-
+>
 > The norEdu classes add further attributes supplementing eduPerson/eduOrg in order to satisfy the requirements of the environment of the Nordic educational community, such as support for National Identity Numbers (norEduPersonNIN) and for the educational numbering and identifier schemes.
 
 Further reading:
