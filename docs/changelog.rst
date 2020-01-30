@@ -42,3 +42,26 @@ here. For additional detail, read the complete `commit history`_.
 **python-cas 1.4.0** ``[2018-10-09]``
 
 * Add kwarg `verify_ssl_certificate` to bypass SSL certificate validation
+
+**python-cas 1.5.0** ``[2020-01-30]``
+
+* PR-17: Test and document support for all modern Python versions
+* PR-18: Distribute package as an universal Python Wheel
+* PR-20: README: Link to python.org using HTTPS
+* PR-21: Minor refactor: Prefer dict literals {} over dict()
+* PR-22: Enable native pip cache in Travis CI
+* PR-23: Fix setup.py: Declare cas.py as a module, not a package
+* PR-24: setup.py: Pass python_requires argument to setuptools
+* PR-25: Remove unnecessary distutils fallback from setup.py
+* PR-26: Fix links in README.rst
+* PR-27: Simplify tox configuration
+* PR-28: Include tests in the source distribution
+* PR-29: Remove pytest-pythonpath dependency
+* PR-30: Use skip_install=true for lint or static tox targets
+* PR-32: Use tox's builtin support for the TOXENV environment variable
+* PR-31: Introduce isort for automatic import ordering
+* PR-33: Simplify dependency handling in tox.ini
+* PR-35: Fix SSL certificate validation due to client field for get_proxy_ticket
+* PR-36: Add support for <norEduPerson> element under <cas:authenticationSuccess>
+* Fix #34: Exclude setup from installed package
+
