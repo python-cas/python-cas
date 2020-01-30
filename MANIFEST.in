@@ -2,3 +2,4 @@ include Makefile *.txt
 include README.rst
 include tox.ini
 recursive-include tests *.py
+#exclude setup.py
