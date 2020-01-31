@@ -18,6 +18,12 @@ Features
 - Support Python 2.7, 3.5, 3.6, 3.7, 3.8
 
 
+Documentation
+-------------
+
+`API Documentation`_
+
+
 Installation
 ------------
 
@@ -32,12 +38,6 @@ Install the latest code::
 Install from source code::
 
     python setup.py install
-
-
-Documentation
--------------
-
-[API Documentation](https://djangocas.dev/docs/4.0/modules/python_cas.html)
 
 
 Testing
@@ -121,3 +121,5 @@ References
 .. _Édouard Lopez: https://github.com/edouard-lopez
 .. _Guillaume Vincent: https://github.com/guillaumevincent
 .. _Evgeny Fadeev: https://github.com/evgenyfadeev
+.. _API Documentation: https://djangocas.dev/docs/4.0/modules/python_cas.html
+
