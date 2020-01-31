@@ -10,13 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 class CASError(ValueError):
+    """CASError type"""
     pass
 
 
 class SingleLogoutMixin(object):
     @classmethod
     def get_saml_slos(cls, logout_request):
-        """returns saml logout ticket info"""
+        """returns SAML logout ticket info"""
+
         try:
             root = etree.fromstring(logout_request)
             return root.xpath(
@@ -27,8 +29,15 @@ class SingleLogoutMixin(object):
 
     @classmethod
     def verify_logout_request(cls, logout_request, ticket):
-        """verifies the single logout request came from the CAS server
-        returns True if the logout_request is valid, False otherwise
+        """Verify the single logout request came from the CAS server
+
+        Args:
+            cls (Class)
+            logout_request (Request)
+            ticket (str)
+
+        Returns:
+            bool: True if the logout_request is valid, False otherwise
         """
         try:
             session_index = cls.get_saml_slos(logout_request)
@@ -72,11 +81,22 @@ class CASClientBase(object):
         pass
 
     def verify_ticket(self, ticket):
-        """must return a triple"""
+        """Verify ticket.
+
+        Sub-class must implement this function.
+        Must return a triple
+
+        Returns:
+            triple: user, attributes, pgtiou
+        """
         raise NotImplementedError()
 
     def get_login_url(self):
-        """Generates CAS login URL"""
+        """Generates CAS login URL
+
+        Returns:
+            str: Login URL
+        """
         params = {'service': self.service_url}
         if self.renew:
             params.update({'renew': 'true'})
@@ -87,7 +107,11 @@ class CASClientBase(object):
         return url + '?' + query
 
     def get_logout_url(self, redirect_url=None):
-        """Generates CAS logout URL"""
+        """Generates CAS logout URL
+
+        Returns:
+            str: Logout URL
+        """
         url = urllib_parse.urljoin(self.server_url, 'logout')
         if redirect_url:
             params = {self.logout_redirect_param_name: redirect_url}
@@ -95,12 +119,23 @@ class CASClientBase(object):
         return url
 
     def get_proxy_url(self, pgt):
-        """Returns proxy url, given the proxy granting ticket"""
+        """Returns proxy url, given the proxy granting ticket
+
+        Returns:
+            str: Proxy URL
+        """
         params = urllib_parse.urlencode({'pgt': pgt, 'targetService': self.service_url})
         return "%s/proxy?%s" % (self.server_url, params)
 
     def get_proxy_ticket(self, pgt):
-        """Returns proxy ticket given the proxy granting ticket"""
+        """Get proxy ticket given the proxy granting ticket
+
+        Returns:
+            str: Proxy ticket.
+
+        Raises:
+            CASError: Non 200 http code or bad XML body.
+        """
         response = requests.get(self.get_proxy_url(pgt), verify=self.verify_ssl_certificate)
         if response.status_code == 200:
             from lxml import etree
@@ -235,6 +270,7 @@ class CASClientV2(CASClientBase):
 
 class CASClientV3(CASClientV2, SingleLogoutMixin):
     """CAS Client Version 3"""
+
     url_suffix = 'p3/serviceValidate'
     logout_redirect_param_name = 'service'
 
@@ -326,7 +362,8 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
             page.close()
 
     def fetch_saml_validation(self, ticket):
-        # We do the SAML validation
+        """We do the SAML validation"""
+
         headers = {
             'soapaction': 'http://www.oasis-open.org/committees/security',
             'cache-control': 'no-cache',
@@ -347,17 +384,31 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
 
     @classmethod
     def get_saml_assertion(cls, ticket):
-        """
-        http://www.jasig.org/cas/protocol#samlvalidate-cas-3.0
+        """Get SAML assertion
 
         SAML request values:
 
-        RequestID [REQUIRED]:
-            unique identifier for the request
-        IssueInstant [REQUIRED]:
-            timestamp of the request
-        samlp:AssertionArtifact [REQUIRED]:
-            the valid CAS Service Ticket obtained as a response parameter at login.
+        - **RequestID** [REQUIRED]: unique identifier for the request
+        - **IssueInstant** [REQUIRED]: timestamp of the request
+        - **samlp:AssertionArtifact** [REQUIRED]: the valid CAS Service Ticket obtained as a response parameter at login.
+
+        Example of `/samlValidate` POST request::
+
+            POST /cas/samlValidate?TARGET=
+            Host: cas.example.com
+            Content-Length: 491
+            Content-Type: text/xml
+
+            <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+                <SOAP-ENV:Header/>
+                <SOAP-ENV:Body>
+                    <samlp:Request xmlns:samlp="urn:oasis:names:tc:SAML:1.0:protocol" MajorVersion="1" MinorVersion="1" RequestID="_192.168.16.51.1024506224022" IssueInstant="2002-06-19T17:03:44.022Z">
+                        <samlp:AssertionArtifact>ST-1-u4hrm3td92cLxpCvrjylcas.example.com</samlp:AssertionArtifact>
+                    </samlp:Request>
+                </SOAP-ENV:Body>
+            </SOAP-ENV:Envelope>
+
+        see https://djangocas.dev/docs/4.0/CAS-Protocol-Specification.html#samlvalidate-cas-3-0
         """
         # RequestID [REQUIRED] - unique identifier for the request
         request_id = uuid4()
