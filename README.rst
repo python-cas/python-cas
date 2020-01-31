@@ -34,6 +34,12 @@ Install from source code::
     python setup.py install
 
 
+Documentation
+-------------
+
+[API Documentation](https://djangocas.dev/docs/4.0/modules/python_cas.html)
+
+
 Testing
 -------
 
