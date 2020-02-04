@@ -21,7 +21,8 @@ Features
 Documentation
 -------------
 
-`API Documentation`_
+- `API Documentation`_
+- `Sample integration with Flask`_
 
 
 Installation
@@ -122,4 +123,5 @@ References
 .. _Guillaume Vincent: https://github.com/guillaumevincent
 .. _Evgeny Fadeev: https://github.com/evgenyfadeev
 .. _API Documentation: https://djangocas.dev/docs/4.0/modules/python_cas.html
+.. _Sample integration with Flask: https://djangocas.dev/blog/2020-02-03-python-cas-flask-example/
 
