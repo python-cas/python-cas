@@ -46,7 +46,7 @@ class SingleLogoutMixin(object):
                 return True
             else:
                 return False
-        except (AttributeError, IndexError):
+        except (AttributeError, IndexError, TypeError):
             return False
 
 

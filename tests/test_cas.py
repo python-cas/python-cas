@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 import sys
-
+import pytest
 import cas
 from pytest import fixture
 
@@ -58,21 +58,24 @@ def test_login_url_helper_with_renew():
 #
 @fixture
 def logout_client_v1():
-    return cas.CASClientV1(
+    return cas.CASClient(
+        version='1',
         server_url='http://www.example.com/cas/'
     )
 
 
 @fixture
 def logout_client_v2():
-    return cas.CASClientV2(
+    return cas.CASClient(
+        version='2',
         server_url='http://www.example.com/cas/'
     )
 
 
 @fixture
 def logout_client_v3():
-    return cas.CASClientV3(
+    return cas.CASClient(
+        version='3',
         server_url='http://www.example.com/cas/'
     )
 
@@ -82,7 +85,6 @@ def test_logout_url(logout_client_v3):
     expected = 'http://www.example.com/cas/logout'
 
     assert actual == expected
-
 
 def test_v1_logout_url_with_redirect(logout_client_v1):
     actual = logout_client_v1.get_logout_url(
@@ -121,7 +123,10 @@ def test_v3_logout_url_without_redirect(logout_client_v3):
 #cas3 responses
 @fixture
 def client_v3():
-    return cas.CASClientV3()
+    return cas.CASClient(
+        version='3',
+        server_url='https://cas.example.com/cas/',
+        service_url='https://example.com/login')
 
 SUCCESS_RESPONSE = """<?xml version=\'1.0\' encoding=\'UTF-8\'?>
 <cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas"><cas:authenticationSuccess><cas:user>user@example.com</cas:user></cas:authenticationSuccess></cas:serviceResponse>
@@ -165,12 +170,16 @@ def test_unsuccessful_response(client_v3):
     assert not pgtiou
     assert not attributes
 
+def test_proxy_url(client_v3):
+    tgt = 'tgt-1234'
+    assert client_v3.get_proxy_url(tgt) == 'https://cas.example.com/cas//proxy?pgt=tgt-1234&targetService=https%3A%2F%2Fexample.com%2Flogin'
+
 
 #test CAS+SAML protocol
 def test_can_saml_assertion_is_encoded():
     ticket = 'test-ticket'
 
-    client = cas.CASClientWithSAMLV1()
+    client = cas.CASClient(version='CAS_2_SAML_1_0')
     saml = client.get_saml_assertion(ticket)
 
     if sys.version_info > (3, 0):
@@ -203,3 +212,40 @@ SUCCESS_RESPONSE_WITH_NON_STANDARD_USER_NODE = """<?xml version="1.0" encoding="
 def test_cas2_non_standard_user_node(client_v2):
     user, attributes, pgtiou = client_v2.verify_response(SUCCESS_RESPONSE_WITH_NON_STANDARD_USER_NODE)
     assert user == 'someuser'
+
+
+def test_unsupported_protocol_version():
+    with pytest.raises(ValueError):
+        cas.CASClient(version='unknown')
+
+def test_verify_logout_request_invalid_parameters():
+    client = cas.CASClientWithSAMLV1()
+    assert not client.verify_logout_request('', '')
+
+def test_verify_logout_request_success():
+    client = cas.CASClientWithSAMLV1()
+    logout_request = '''
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+   ID="[RANDOM ID]" Version="2.0" IssueInstant="[CURRENT DATE/TIME]">
+  <saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+    @NOT_USED@
+  </saml:NameID>
+  <samlp:SessionIndex>st-1234</samlp:SessionIndex>
+</samlp:LogoutRequest>
+    '''
+    ticket = 'st-1234'
+    assert client.verify_logout_request(logout_request, ticket)
+
+def test_verify_logout_request_invalid_st():
+    client = cas.CASClientWithSAMLV1()
+    logout_request = '''
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+   ID="[RANDOM ID]" Version="2.0" IssueInstant="[CURRENT DATE/TIME]">
+  <saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+    @NOT_USED@
+  </saml:NameID>
+  <samlp:SessionIndex>st-1234</samlp:SessionIndex>
+</samlp:LogoutRequest>
+    '''
+    ticket = 'st-not-match'
+    assert not client.verify_logout_request(logout_request, ticket)
