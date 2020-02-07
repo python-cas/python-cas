@@ -5,11 +5,11 @@ Python CAS
     :target: https://travis-ci.org/python-cas/python-cas
 
 
-``Python CAS`` Python utilities to implement CAS protocol (Central Authentication Server) client.
+``Python CAS`` Python utilities to implement CAS protocol (Central Authentication Service) client.
 
 This project was started by factoring out **CASClient** classes from the
 `django-cas-ng`_ project.
-Now **CASClient** can be used by any python project, not only for Django.
+Now **CASClient** can be used by any python project, e.g. Django, Pyramid, Flask, Sanic, FastAPI, Tornado, web2py etc.
 
 Features
 --------
@@ -38,6 +38,8 @@ Install the latest code::
 
 Install from source code::
 
+    git clone git@github.com:python-cas/python-cas.git
+    cd python-cas
     python setup.py install
 
 
