@@ -3,10 +3,9 @@ from __future__ import absolute_import
 
 import sys
 
+import cas
 import pytest
 from pytest import fixture
-
-import cas
 
 
 #general tests, apply to all protocols
