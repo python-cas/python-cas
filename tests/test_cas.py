@@ -174,8 +174,8 @@ def test_unsuccessful_response(client_v3):
 
 def test_proxy_url(client_v3):
     tgt = 'tgt-1234'
-    assert client_v3.get_proxy_url(tgt) == 'https://cas.example.com/cas//proxy?pgt=tgt-1234&targetService=https%3A%2F%2Fexample.com%2Flogin'
-
+    proxy_url_string = client_v3.get_proxy_url(tgt)
+    assert proxy_url_string == 'https://cas.example.com/cas//proxy?pgt=tgt-1234&targetService=https%3A%2F%2Fexample.com%2Flogin' or proxy_url_string == 'https://cas.example.com/cas//proxy?targetService=https%3A%2F%2Fexample.com%2Flogin&pgt=tgt-1234'
 
 #test CAS+SAML protocol
 def test_can_saml_assertion_is_encoded():
