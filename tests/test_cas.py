@@ -2,9 +2,11 @@
 from __future__ import absolute_import
 
 import sys
+
 import pytest
-import cas
 from pytest import fixture
+
+import cas
 
 
 #general tests, apply to all protocols
