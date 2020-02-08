@@ -1,5 +1,4 @@
-lxml>=3.4
-pytest
-six
-tox==1.8.1
-requests
+-r requirements.txt
+pytest==5.3.5
+pytest-cov==2.8.1
+pytest-pythonpath==0.7
