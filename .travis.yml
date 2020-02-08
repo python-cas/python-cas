@@ -19,9 +19,16 @@ matrix:
     - env: TOXENV=isort
 
 install:
-  - "travis_retry pip install setuptools --upgrade"
-  - "pip install tox"
+  - travis_retry pip install setuptools --upgrade
+  - pip install tox
+  - pip install codecov
+
 script:
   - tox
+
 after_script:
   - cat .tox/$TOXENV/log/*.log
+
+# Push the results back to codecov
+after_success:
+  - codecov
