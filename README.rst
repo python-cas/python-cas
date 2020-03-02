@@ -124,6 +124,6 @@ References
 .. _Édouard Lopez: https://github.com/edouard-lopez
 .. _Guillaume Vincent: https://github.com/guillaumevincent
 .. _Evgeny Fadeev: https://github.com/evgenyfadeev
-.. _API Documentation: https://djangocas.dev/docs/4.0/modules/python_cas.html
-.. _Sample integration with Flask: https://djangocas.dev/blog/2020-02-03-python-cas-flask-example/
+.. _API Documentation: https://djangocas.dev/docs/latest/modules/python_cas.html
+.. _Sample integration with Flask: https://djangocas.dev/blog/python-cas-flask-example/
 
