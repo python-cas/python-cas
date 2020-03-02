@@ -5,16 +5,18 @@ Python CAS
     :target: https://travis-ci.org/python-cas/python-cas
 
 
-``Python CAS`` Python utilities to implement CAS protocol (Central Authentication Service) client.
+``Python CAS`` implements CAS protocol (Central Authentication Service) client.
 
-This project was started by factoring out **CASClient** classes from the
+This project was started by refactoring out **CASClient** classes from the
 `django-cas-ng`_ project.
-Now **CASClient** can be used by any python project, e.g. Django, Pyramid, Flask, Sanic, FastAPI, Tornado, web2py etc.
+
+Now **CASClient** can be used by any python project,
+e.g. Django, Pyramid, Flask, Sanic, FastAPI, Tornado, web2py etc.
 
 Features
 --------
 
-- Support Client part of CAS_ version 1.0, 2.0 and 3.0.
+- Support Client part of **CAS** version 1.0, 2.0 and 3.0.
 - Support Python 2.7, 3.5, 3.6, 3.7, 3.8
 
 
@@ -28,7 +30,7 @@ Documentation
 Installation
 ------------
 
-Install with `pip`_::
+Install the latest stable release with `pip`_::
 
     pip install python-cas
 
@@ -38,7 +40,7 @@ Install the latest code::
 
 Install from source code::
 
-    git clone git@github.com:python-cas/python-cas.git
+    git clone --depth 1 git@github.com:python-cas/python-cas.git
     cd python-cas
     python setup.py install
 
@@ -102,8 +104,7 @@ References
 * `CAS protocol`_
 * `Jasig CAS server`_
 
-.. _CAS: https://www.apereo.org/cas
-.. _CAS protocol: https://www.apereo.org/cas/protocol
+.. _CAS protocol: https://djangocas.dev/docs/latest/CAS-Protocol-Specification.html
 .. _django-cas-ng: https://github.com/django-cas-ng/django-cas-ng
 .. _django-cas: https://bitbucket.org/cpcc/django-cas
 .. _pip: http://www.pip-installer.org/
