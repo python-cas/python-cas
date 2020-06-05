@@ -96,6 +96,7 @@ Credits
 * `Édouard Lopez`_.
 * `Guillaume Vincent`_.
 * `Evgeny Fadeev`_.
+* `Mehdi Benadda`_.
 
 References
 ----------
@@ -125,6 +126,6 @@ References
 .. _Édouard Lopez: https://github.com/edouard-lopez
 .. _Guillaume Vincent: https://github.com/guillaumevincent
 .. _Evgeny Fadeev: https://github.com/evgenyfadeev
+.. _Mehdi Benadda: https://github.com/mbenadda
 .. _API Documentation: https://djangocas.dev/docs/latest/modules/python_cas.html
 .. _Sample integration with Flask: https://djangocas.dev/blog/python-cas-flask-example/
-

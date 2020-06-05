@@ -338,7 +338,7 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
             tree = ElementTree.fromstring(response)
             # Find the authentication status
             success = tree.find('.//' + SAML_1_0_PROTOCOL_NS + 'StatusCode')
-            if success is not None and success.attrib['Value'].endswith(':Success'):
+            if success is not None and success.attrib['Value'].endswith('Success'):
                 # User is validated
                 name_identifier = tree.find('.//' + SAML_1_0_ASSERTION_NS + 'NameIdentifier')
                 if name_identifier is not None:
