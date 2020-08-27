@@ -104,7 +104,7 @@ class CASClientBase(object):
         params.update(self.extra_login_params)
         url = urllib_parse.urljoin(self.server_url, 'login')
         query = urllib_parse.urlencode(params)
-        return url + '?' + query
+        return ''.join([url, '?', query])
 
     def get_logout_url(self, redirect_url=None):
         """Generates CAS logout URL
@@ -115,7 +115,8 @@ class CASClientBase(object):
         url = urllib_parse.urljoin(self.server_url, 'logout')
         if redirect_url:
             params = {self.logout_redirect_param_name: redirect_url}
-            url += '?' + urllib_parse.urlencode(params)
+            query = urllib_parse.urlencode(params)
+            return ''.join([url, '?', query])
         return url
 
     def get_proxy_url(self, pgt):
@@ -124,8 +125,10 @@ class CASClientBase(object):
         Returns:
             str: Proxy URL
         """
-        params = urllib_parse.urlencode({'pgt': pgt, 'targetService': self.service_url})
-        return "%s/proxy?%s" % (self.server_url, params)
+        params = {'pgt': pgt, 'targetService': self.service_url}
+        url = urllib_parse.urljoin(self.server_url, 'proxy')
+        query = urllib_parse.urlencode(params)
+        return ''.join([url, '?', query])
 
     def get_proxy_ticket(self, pgt):
         """Get proxy ticket given the proxy granting ticket
