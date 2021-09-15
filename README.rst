@@ -1,9 +1,8 @@
 Python CAS
 ==========
 
-.. image:: https://travis-ci.org/python-cas/python-cas.svg?branch=master
-    :target: https://travis-ci.org/python-cas/python-cas
-
+.. image:: https://github.com/python-cas/python-cas/actions/workflows/CI.yml/badge.svg
+    :target: https://github.com/python-cas/python-cas/actions/workflows/CI.yml
 
 ``Python CAS`` implements CAS protocol (Central Authentication Service) client.
 
