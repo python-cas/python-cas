@@ -189,6 +189,28 @@ def test_can_saml_assertion_is_encoded():
     else:
         assert ticket in saml
 
+# Test session= constructor argument with a mock session
+@pytest.mark.skipif(sys.version_info < (3, 3), reason="Mock class not available")
+def test_v3_custom_session():
+    from unittest.mock import Mock
+
+    response = Mock()
+    response.content = SUCCESS_RESPONSE
+    session = Mock()
+    session.get = Mock(return_value=response)
+
+    client = cas.CASClient(
+        version='3',
+        server_url='https://cas.example.com/cas/',
+        service_url='https://example.com/login',
+        session=session)
+    user, attributes, pgtiou = client.verify_ticket('ABC123')
+
+    assert user == 'user@example.com'
+    assert not attributes
+    assert not pgtiou
+
+
 
 @fixture
 def client_v2():
