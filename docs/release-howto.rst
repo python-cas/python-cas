@@ -16,6 +16,7 @@ How To Make A Release
 
 6. Upload release to pypi.python.org
 
-    python setup.py sdist bdist_wheel upload
+    python setup.py sdist bdist_wheel
+    twine upload dist/*
 
 7. Create a new release on https://github.com/python-cas/python-cas/releases
