@@ -65,3 +65,9 @@ here. For additional detail, read the complete `commit history`_.
 * PR-36: Add support for <norEduPerson> element under <cas:authenticationSuccess>
 * Fix #34: Exclude setup from installed package
 
+**python-cas 1.6.0** ``[202l-09-17]``
+
+* Refine docstring to google style for better documentation
+* PR #39: Fix SAML ticket verification failing when response is not namespaced @mbenadda 
+* PR #44: Use Session for making requests & allow customization @intgr
+
