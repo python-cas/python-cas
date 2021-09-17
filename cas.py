@@ -70,7 +70,8 @@ class CASClientBase(object):
 
     def __init__(self, service_url=None, server_url=None,
                  extra_login_params=None, renew=False,
-                 username_attribute=None, verify_ssl_certificate=True):
+                 username_attribute=None, verify_ssl_certificate=True,
+                 session=None):
 
         self.service_url = service_url
         self.server_url = server_url
@@ -78,7 +79,7 @@ class CASClientBase(object):
         self.renew = renew
         self.username_attribute = username_attribute
         self.verify_ssl_certificate = verify_ssl_certificate
-        pass
+        self.session = session or requests.Session()
 
     def verify_ticket(self, ticket):
         """Verify ticket.
@@ -136,7 +137,7 @@ class CASClientBase(object):
         Raises:
             CASError: Non 200 http code or bad XML body.
         """
-        response = requests.get(self.get_proxy_url(pgt), verify=self.verify_ssl_certificate)
+        response = self.session.get(self.get_proxy_url(pgt), verify=self.verify_ssl_certificate)
         if response.status_code == 200:
             from lxml import etree
             root = etree.fromstring(response.content)
@@ -168,7 +169,7 @@ class CASClientV1(CASClientBase):
         params = [('ticket', ticket), ('service', self.service_url)]
         url = (urllib_parse.urljoin(self.server_url, 'validate') + '?' +
                urllib_parse.urlencode(params))
-        page = requests.get(
+        page = self.session.get(
             url,
             stream=True,
             verify=self.verify_ssl_certificate
@@ -208,7 +209,7 @@ class CASClientV2(CASClientBase):
         if self.proxy_callback:
             params.update({'pgtUrl': self.proxy_callback})
         base_url = urllib_parse.urljoin(self.server_url, self.url_suffix)
-        page = requests.get(
+        page = self.session.get(
             base_url,
             params=params,
             verify=self.verify_ssl_certificate
@@ -376,7 +377,7 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
         saml_validate_url = urllib_parse.urljoin(
             self.server_url, 'samlValidate',
         )
-        return requests.post(
+        return self.session.post(
             saml_validate_url,
             self.get_saml_assertion(ticket),
             params=params,
