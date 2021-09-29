@@ -1,3 +1,5 @@
+.PHONY: all build clean install test
+
 PYTHON=python
 
 all: build
@@ -12,3 +14,6 @@ clean:
 
 install:
 	$(PYTHON) setup.py install
+
+test:
+	TOXENV=py39 tox

@@ -16,7 +16,7 @@ Features
 --------
 
 - Support Client part of **CAS** version 1.0, 2.0 and 3.0.
-- Support Python 2.7, 3.5, 3.6, 3.7, 3.8
+- Support Python 2.7, 3.5, 3.6, 3.7, 3.8, 3.9
 
 
 Documentation
