@@ -25,7 +25,7 @@ here. For additional detail, read the complete `commit history`_.
 **python-cas 1.2.0** ``[2016-11-06]``
 
 * Replace urllib2 calls with requests to avoid SNI issues
-* In SAMLV1.1, the user username is withing NameIdentifier tags
+* In SAMLV1.1, the user username is within NameIdentifier tags
 
 .. _commit history: https://github.com/python-cas/python-cas/commits
 .. _django-cas-ng: https://github.com/mingchen/django-cas-ng
@@ -46,7 +46,7 @@ here. For additional detail, read the complete `commit history`_.
 **python-cas 1.5.0** ``[2020-01-30]``
 
 * PR-17: Test and document support for all modern Python versions
-* PR-18: Distribute package as an universal Python Wheel
+* PR-18: Distribute package as a universal Python Wheel
 * PR-20: README: Link to python.org using HTTPS
 * PR-21: Minor refactor: Prefer dict literals {} over dict()
 * PR-22: Enable native pip cache in Travis CI
@@ -65,7 +65,7 @@ here. For additional detail, read the complete `commit history`_.
 * PR-36: Add support for <norEduPerson> element under <cas:authenticationSuccess>
 * Fix #34: Exclude setup from installed package
 
-**python-cas 1.6.0** ``[202l-09-17]``
+**python-cas 1.6.0** ``[2021-09-17]``
 
 * Refine docstring to google style for better documentation
 * PR #39: Fix SAML ticket verification failing when response is not namespaced @mbenadda 
