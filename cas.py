@@ -79,7 +79,7 @@ class CASClientBase(object):
         self.renew = renew
         self.username_attribute = username_attribute
         self.verify_ssl_certificate = verify_ssl_certificate
-        self.session = session or requests.Session()
+        self.session = session or requests.sessions.Session()
 
     def verify_ticket(self, ticket):
         """Verify ticket.
