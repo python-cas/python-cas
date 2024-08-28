@@ -16,4 +16,4 @@ install:
 	$(PYTHON) setup.py install
 
 test:
-	TOXENV=py39 tox
+	TOXENV=py310 tox
