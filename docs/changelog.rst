@@ -71,3 +71,17 @@ here. For additional detail, read the complete `commit history`_.
 * PR #39: Fix SAML ticket verification failing when response is not namespaced @mbenadda 
 * PR #44: Use Session for making requests & allow customization @intgr
 
+**python-cas 1.7.0** ``[2025-10-08]``
+
+* github actions: test on ubuntu 24 (#58) @nikolas
+* Update supported python versions (#57) @nikolas
+* Test on python 3.10 by default (#56) @nikolas
+* Remove old python versions from tox (#55) @nikolas
+* Remove universal wheel (#54) @nikolas
+* Update pytest (#53) @nikolas
+* Add python 3.11 testing, update github actions envs (#52) @nikolas
+* setup.py: add classifiers for py3.9, py3.10 (#50) @nikolas
+* Add python 3.10 testing (#49) @nikolas
+* Fixing 'requests.api' has no attribute 'Session' (#47) @vhelke
+* Fix get_proxy_url adding unnecessary '/' (#41) @seayjohnny
+* Fix a few typos in changelog (#45) @intgr
