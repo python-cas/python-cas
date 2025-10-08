@@ -1,6 +1,6 @@
 -r requirements.txt
-pytest==8.3.2
-pytest-cov==5.0.0
+pytest==8.4.2
+pytest-cov==7.0.0
 pytest-pythonpath==0.7.4
 wheel
 twine
