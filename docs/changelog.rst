@@ -85,3 +85,7 @@ here. For additional detail, read the complete `commit history`_.
 * Fixing 'requests.api' has no attribute 'Session' (#47) @vhelke
 * Fix get_proxy_url adding unnecessary '/' (#41) @seayjohnny
 * Fix a few typos in changelog (#45) @intgr
+
+**python-cas 1.7.1** ``[2025-11-05]``
+
+* Removed dependency on package: six
