@@ -28,7 +28,6 @@ setup(
     ],
     python_requires=">=3.10",
     install_requires=[
-        'six>=1.10.0',
         'requests>=2.11.1',
         'lxml>=3.4',
     ],
