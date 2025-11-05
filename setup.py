@@ -39,5 +39,5 @@ setup(
     py_modules=['cas'],
     url='https://github.com/python-cas/python-cas',
     download_url ='https://github.com/python-cas/python-cas/releases',
-    version='1.7.0',
+    version='1.7.1',
 )
