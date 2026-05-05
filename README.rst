@@ -9,9 +9,6 @@ Python CAS
 This project was started by refactoring out **CASClient** classes from the
 `django-cas-ng`_ project.
 
-Now **CASClient** can be used by any python project,
-e.g. Django, Pyramid, Flask, Sanic, FastAPI, Tornado, web2py etc.
-
 Features
 --------
 
