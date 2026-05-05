@@ -44,8 +44,6 @@ Install from source code::
 Testing
 -------
 
-Every code commit triggers a **travis-ci** build. checkout current build status at https://travis-ci.org/python-cas/python-cas
-
 Testing is managed by ``pytest`` and ``tox``.
 Before run install, you need install required packages for testing::
 
