@@ -60,7 +60,7 @@ To run all testing on all enviroments locally::
     tox
 
 
-Contribution
+Contributing
 ------------
 
 Contributions are welcome!
