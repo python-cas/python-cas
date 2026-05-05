@@ -89,3 +89,7 @@ here. For additional detail, read the complete `commit history`_.
 **python-cas 1.7.1** ``[2025-11-05]``
 
 * Removed dependency on package: six
+
+**python-cas 1.7.2** ``[2026-05-05]``
+
+* Fix unicode decoding bug in CASClientV1
