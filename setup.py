@@ -35,6 +35,7 @@ setup(
     keywords=['cas', 'cas2', 'cas3', 'client', 'sso', 'single sign-on', 'authentication', 'auth'],
     license='MIT',
     long_description=readme,
+    long_description_content_type='text/x-rst',
     name='python-cas',
     py_modules=['cas'],
     url='https://github.com/python-cas/python-cas',
