@@ -177,7 +177,8 @@ class CASClientV1(CASClientBase):
             verify=self.verify_ssl_certificate
         )
         try:
-            page_iterator = page.iter_lines(chunk_size=8192)
+            page_iterator = page.iter_lines(
+                chunk_size=8192, decode_unicode=True)
             verified = next(page_iterator).strip()
             if verified == 'yes':
                 return next(page_iterator).strip(), None, None
