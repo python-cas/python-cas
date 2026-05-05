@@ -4,9 +4,9 @@ Python CAS
 .. image:: https://github.com/python-cas/python-cas/actions/workflows/CI.yml/badge.svg
     :target: https://github.com/python-cas/python-cas/actions/workflows/CI.yml
 
-``Python CAS`` implements CAS protocol (Central Authentication Service) client.
+python-cas implements a CAS protocol (Central Authentication Service) client.
 
-This project was started by refactoring out **CASClient** classes from the
+This project was started by refactoring **CASClient** classes out of the
 `django-cas-ng`_ project.
 
 Features
