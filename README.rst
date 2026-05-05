@@ -1,6 +1,7 @@
-Python CAS
+python-cas
 ==========
-
+.. image:: https://img.shields.io/pypi/v/python-cas.svg
+    :target: https://pypi.org/project/python-cas/
 .. image:: https://github.com/python-cas/python-cas/actions/workflows/CI.yml/badge.svg
     :target: https://github.com/python-cas/python-cas/actions/workflows/CI.yml
 
