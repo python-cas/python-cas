@@ -195,6 +195,7 @@ def test_v3_custom_session():
     from unittest.mock import Mock
 
     response = Mock()
+    response.status_code = 200
     response.content = SUCCESS_RESPONSE
     session = Mock()
     session.get = Mock(return_value=response)

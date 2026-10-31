@@ -218,6 +218,8 @@ class CASClientV2(CASClientBase):
             verify=self.verify_ssl_certificate
         )
         try:
+            if page.status_code != 200:
+                raise CASError("Bad http code %s" % page.status_code)
             return page.content
         finally:
             page.close()
