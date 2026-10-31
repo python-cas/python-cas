@@ -350,11 +350,16 @@ class CASClientWithSAMLV1(CASClientV2, SingleLogoutMixin):
                 attrs = tree.findall('.//' + SAML_1_0_ASSERTION_NS + 'Attribute')
                 for at in attrs:
                     if self.username_attribute in list(at.attrib.values()):
-                        user = at.find(SAML_1_0_ASSERTION_NS + 'AttributeValue').text
-                        attributes['uid'] = user
+                        value_el = at.find(SAML_1_0_ASSERTION_NS + 'AttributeValue')
+                        if value_el is not None:
+                            user = value_el.text
+                            attributes['uid'] = user
 
                     values = at.findall(SAML_1_0_ASSERTION_NS + 'AttributeValue')
-                    if len(values) > 1:
+                    if len(values) == 0:
+                        # Valid per SAML 1.0: an attribute with no values
+                        attributes[at.attrib['AttributeName']] = []
+                    elif len(values) > 1:
                         values_array = []
                         for v in values:
                             values_array.append(v.text)
